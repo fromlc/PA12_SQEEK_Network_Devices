@@ -1,0 +1,7 @@
+Router,R1,4,Equipment closet,OSPF.RIP,S1.S2.REdge
+Router,R2,3,Janitor's closet,OSPF,S3.S4.REdge
+Router,REdge,3,Equipment closet,OSPF.RIP.BGP,R1.R2.RCOXCOMM
+Switch,S1,12,Janitor's closet,42.20,R1.S3
+Switch,S2,48,Break room,42.9,R1.S4
+Switch,S3,48,Break room,9.20.51,R2.S1
+Switch,S4,24,Loading dock,10.30.20,R2.S2
