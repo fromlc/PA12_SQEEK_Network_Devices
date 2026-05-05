@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\NetworkDevice.cpp" />
     <ClCompile Include="source\PA12_SQEEK_Network_Devices.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\NetworkDevice.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
