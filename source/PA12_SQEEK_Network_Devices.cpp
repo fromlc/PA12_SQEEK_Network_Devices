@@ -48,7 +48,6 @@ void readFile(std::vector<NetworkDevice*>& vpDevices)
 {
     std::ifstream input(INPUT_FILENAME);
     std::string line;
-
     std::string token;
 
     while (getline(input, line))
@@ -60,13 +59,10 @@ void readFile(std::vector<NetworkDevice*>& vpDevices)
 
         std::getline(ss, token, ',');
         if (!token.compare("Router"))
-        {
             pND = new Router();
-        }
         else
-        {
             pND = new Switch();
-        }
+
         setDeviceData(pND, ss);
         std::getline(ss, token, ',');
         pND->setDeviceSpecific(token);
@@ -80,7 +76,7 @@ void readFile(std::vector<NetworkDevice*>& vpDevices)
 //------------------------------------------------------------------------------
 // build Router or Switch instance from stringstream data
 //------------------------------------------------------------------------------
-static void setDeviceData(NetworkDevice*pND, std::stringstream& ss)
+static inline void setDeviceData(NetworkDevice*pND, std::stringstream& ss)
 {
     std::string token;
 
