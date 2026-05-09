@@ -66,7 +66,7 @@ int main()
         exit(ERROR_FILE_OTHER);
     }
 
-    std::cout << "Number of network device assets :"
+    std::cout << "Number of network device assets: "
         << NetworkDevice::assetCount << "\n\n";
 
     // count total device ports
