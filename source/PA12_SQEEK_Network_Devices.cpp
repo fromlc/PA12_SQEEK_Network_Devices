@@ -34,11 +34,18 @@ int main()
     std::cout << "Number of network device assets :"
         << NetworkDevice::assetCount << "\n\n";
 
+    // count total device ports
+    unsigned totalPorts = 0;
+
     for (NetworkDevice* pDevice : vDevices.vpDevices)
     {
+        totalPorts += pDevice->ports;
+
         pDevice->print();
         std::cout << "\n";
     }
+
+    std::cout << "Total Ethernet ports: " << totalPorts << "\n\n";
 }
 
 //------------------------------------------------------------------------------
