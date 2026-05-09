@@ -121,7 +121,10 @@ public:
     std::vector<NetworkDevice*> vpDevices;
 
     // constructor
-    VectorWrapper() = default;
+    VectorWrapper(unsigned estDevices)
+    {
+        vpDevices.reserve(estDevices);
+    }
 
     // destructor
     ~VectorWrapper()
