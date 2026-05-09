@@ -1,5 +1,7 @@
 #include "NetworkDevice.hpp"
 
+#include <cstdlib>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -7,14 +9,34 @@
 #include <vector>
 
 //------------------------------------------------------------------------------
+// constants
+//------------------------------------------------------------------------------
+const unsigned ESTIMATED_DEVICE_COUNT = 32;
+
+const int ERROR_FILE_OPEN = -1;
+const int ERROR_FILE_OTHER = -2;
+
+//------------------------------------------------------------------------------
 // input file name and format
 //------------------------------------------------------------------------------
 const std::string INPUT_FILENAME = "PA12_network_devices.txt";
 
 //------------------------------------------------------------------------------
+// derived exception class
+//------------------------------------------------------------------------------
+class FileReadError : public std::exception
+{
+public:
+    const char* what() const noexcept override
+    {
+        return "Error opening file : ";
+    }
+};
+
+//------------------------------------------------------------------------------
 // local function prototypes
 //------------------------------------------------------------------------------
-void readFile(std::vector<NetworkDevice*>& vpDevices);
+void getFileData(std::vector<NetworkDevice*>& vpDevices);
 static void setDeviceData(NetworkDevice*pND, std::stringstream& ss);
 
 //------------------------------------------------------------------------------
@@ -27,9 +49,22 @@ unsigned NetworkDevice::assetCount = 0;
 //------------------------------------------------------------------------------
 int main()
 {
-    VectorWrapper vDevices;
+    VectorWrapper vDevices(ESTIMATED_DEVICE_COUNT);
 
-    readFile(vDevices.vpDevices);
+    try
+    {
+        getFileData(vDevices.vpDevices);
+    }
+    catch (const FileReadError& e)
+    {
+        std::cout << e.what() << INPUT_FILENAME << "\n";
+        exit(ERROR_FILE_OPEN);
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << "\n";
+        exit(ERROR_FILE_OTHER);
+    }
 
     std::cout << "Number of network device assets :"
         << NetworkDevice::assetCount << "\n\n";
@@ -51,9 +86,12 @@ int main()
 //------------------------------------------------------------------------------
 // read input file and display
 //------------------------------------------------------------------------------
-void readFile(std::vector<NetworkDevice*>& vpDevices)
+void getFileData(std::vector<NetworkDevice*>& vpDevices)
 {
     std::ifstream input(INPUT_FILENAME);
+    if (!input)
+        throw FileReadError();
+
     std::string line;
     std::string token;
 
