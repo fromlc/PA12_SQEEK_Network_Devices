@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\NetworkDevice.cpp" />
     <ClCompile Include="source\PA12_SQEEK_Network_Devices.cpp" />
   </ItemGroup>
   <ItemGroup>

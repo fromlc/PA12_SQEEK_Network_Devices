@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="PA12_SQEEK_Network_Devices.vcxproj" />
+  <Project Path="PA12_SQEEK_Network_Devices.vcxproj" Id="59a0280b-9371-4dad-a2a2-cb4eff86e1fd" />
 </Solution>

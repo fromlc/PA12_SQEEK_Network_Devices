@@ -18,9 +18,6 @@
     <ClCompile Include="source\PA12_SQEEK_Network_Devices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\NetworkDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\NetworkDevice.hpp">
