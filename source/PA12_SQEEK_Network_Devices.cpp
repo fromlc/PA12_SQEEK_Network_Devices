@@ -34,7 +34,7 @@ const std::string MSG_ERROR_BAD_PORT_COUNT = "Error converting device port count
 const std::string MSG_ERROR_UNKNOWN = "An unknown error occurred.";
 
 //------------------------------------------------------------------------------
-// derived exception class
+// custom exception class
 //------------------------------------------------------------------------------
 class FileReadError : public std::exception
 {
