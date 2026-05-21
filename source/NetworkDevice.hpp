@@ -1,7 +1,9 @@
 //------------------------------------------------------------------------------
-// Base class NetworkDevice declaration and definition
-// Derived class Router declaration and definition
-// Derived class Switch declaration and definition
+// NetworkDevice.hpp
+// 
+// declarations and definitions for:
+//  - Base class NetworkDevice
+//  - Derived classes Router and Switch
 //------------------------------------------------------------------------------
 #pragma once
 

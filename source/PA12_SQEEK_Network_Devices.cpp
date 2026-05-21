@@ -1,3 +1,9 @@
+//------------------------------------------------------------------------------
+// PA12_SQEEK_Network_Devices.cpp
+// 
+// Code for reading device field data from each line derived from:
+// https://www.geeksforgeeks.org/cpp/string-find-in-cpp/
+//------------------------------------------------------------------------------
 #include "NetworkDevice.hpp"
 
 #include <cstdlib>
