@@ -112,16 +112,13 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
 //------------------------------------------------------------------------------
 static inline void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
 {
-    std::string token;
+    std::string portStr;
 
-    std::getline(ss, token, ',');
-    pND->name = token;
-    std::getline(ss, token, ',');
-    pND->ports = std::stoi(token);
-    std::getline(ss, token, ',');
-    pND->location = token;
-    std::getline(ss, token, ',');
-    pND->connectedTo = token;
+    std::getline(ss, pND->name, ',');
+    std::getline(ss, portStr, ',');
+    pND->ports = stoi(portStr);
+    std::getline(ss, pND->location, ',');
+    std::getline(ss, pND->connectedTo, ',');
 }
 
 //------------------------------------------------------------------------------
