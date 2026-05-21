@@ -113,8 +113,9 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
 
 //------------------------------------------------------------------------------
 // - build Router or Switch instance from stringstream data
+// - catch exception on bad device port count, default it to zero
 //------------------------------------------------------------------------------
-static inline void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
+static void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
 {
     std::getline(ss, pND->name, ',');
 
@@ -182,4 +183,3 @@ void reportDevices(std::vector<NetworkDevice*>& vpDevices)
 
     std::cout << "Total Ethernet ports: " << totalPorts << "\n\n";
 }
-
