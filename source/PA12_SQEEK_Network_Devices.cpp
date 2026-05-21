@@ -128,10 +128,11 @@ void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
     }
     catch (const std::exception& e)
     {
-        std::cout << MSG_ERROR_BAD_PORT_COUNT << "\n";
-
         // default device port count to 0 if conversion fails
         pND->ports = 0;
+
+        std::cout << MSG_ERROR_BAD_PORT_COUNT
+            << "\n\t" << pND->name << " defaulted to 0 ports.\n";
     }
 
     std::getline(ss, pND->location, ',');
