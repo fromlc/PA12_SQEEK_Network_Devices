@@ -46,12 +46,6 @@ public:
         std::cout << "Ports: " << ports << "\n";
         std::cout << "Connected to: " << connectedTo << "\n";
     }
-
-    // overload + operator
-    unsigned operator+(NetworkDevice& rhs)
-    {
-        return rhs.ports;
-    }
 };
 
 //------------------------------------------------------------------------------
