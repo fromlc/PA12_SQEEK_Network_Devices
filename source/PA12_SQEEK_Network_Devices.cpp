@@ -17,19 +17,22 @@
 //------------------------------------------------------------------------------
 // constants
 //------------------------------------------------------------------------------
+// input file name
+const std::string INPUT_FILENAME = "PA12_network_devices.txt";
+
 const unsigned ESTIMATED_DEVICE_COUNT = 32;
 
+// error codes
 const int ERROR_ALL_OK = 0;
 const int ERROR_FILE_OPEN = -1;
 const int ERROR_FILE_OTHER = -2;
 const int ERROR_UNKNOWN = -99;
 
-//------------------------------------------------------------------------------
-// input file name and format
-//------------------------------------------------------------------------------
-const std::string INPUT_FILENAME = "PA12_network_devices.txt";
-
+// error messages
+const char* MSG_FILEREADERROR = "Error opening file : ";
+const std::string MSG_ERROR_BAD_PORT_COUNT = "Error converting device port count: ";
 const std::string MSG_ERROR_UNKNOWN = "An unknown error occurred.";
+
 //------------------------------------------------------------------------------
 // derived exception class
 //------------------------------------------------------------------------------
@@ -38,7 +41,7 @@ class FileReadError : public std::exception
 public:
     const char* what() const noexcept override
     {
-        return "Error opening file : ";
+        return MSG_FILEREADERROR;
     }
 };
 
@@ -70,7 +73,8 @@ int main()
 }
 
 //------------------------------------------------------------------------------
-// read input file and display
+// - read input file and store device data
+// - throw exception if file cannot be opened
 //------------------------------------------------------------------------------
 void getFileData(std::vector<NetworkDevice*>& vpDevices)
 {
@@ -108,15 +112,27 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
 }
 
 //------------------------------------------------------------------------------
-// build Router or Switch instance from stringstream data
+// - build Router or Switch instance from stringstream data
 //------------------------------------------------------------------------------
 static inline void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
 {
-    std::string portStr;
-
     std::getline(ss, pND->name, ',');
+
+    std::string portStr;
     std::getline(ss, portStr, ',');
-    pND->ports = stoi(portStr);
+
+    try
+    {
+        pND->ports = stoi(portStr);
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << MSG_ERROR_BAD_PORT_COUNT << e.what() << "\n";
+
+        // default device port count to 0 if conversion fails
+        pND->ports = 0;
+    }
+
     std::getline(ss, pND->location, ',');
     std::getline(ss, pND->connectedTo, ',');
 }
