@@ -49,12 +49,12 @@ public:
 // local function prototypes
 //------------------------------------------------------------------------------
 void getFileData(std::vector<NetworkDevice*>& vpDevices);
-static void setDeviceData(std::stringstream& ss, NetworkDevice*pND);
+void setDeviceData(std::stringstream& ss, NetworkDevice*pND);
 void processDevices(std::vector<NetworkDevice*>& vpDevices);
 void reportDevices(std::vector<NetworkDevice*>& vpDevices);
 
 //------------------------------------------------------------------------------
-// NetworkDevice static member
+// initialize NetworkDevice static member
 //------------------------------------------------------------------------------
 unsigned NetworkDevice::assetCount = 0;
 
@@ -115,7 +115,7 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
 // - build Router or Switch instance from stringstream data
 // - catch exception on bad device port count, default it to zero
 //------------------------------------------------------------------------------
-static void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
+void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
 {
     std::getline(ss, pND->name, ',');
 
