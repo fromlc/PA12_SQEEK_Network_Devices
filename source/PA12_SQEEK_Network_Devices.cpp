@@ -19,14 +19,17 @@
 //------------------------------------------------------------------------------
 const unsigned ESTIMATED_DEVICE_COUNT = 32;
 
+const int ERROR_ALL_OK = 0;
 const int ERROR_FILE_OPEN = -1;
 const int ERROR_FILE_OTHER = -2;
+const int ERROR_UNKNOWN = -99;
 
 //------------------------------------------------------------------------------
 // input file name and format
 //------------------------------------------------------------------------------
 const std::string INPUT_FILENAME = "PA12_network_devices.txt";
 
+const std::string MSG_ERROR_UNKNOWN = "An unknown error occurred.";
 //------------------------------------------------------------------------------
 // derived exception class
 //------------------------------------------------------------------------------
@@ -43,7 +46,9 @@ public:
 // local function prototypes
 //------------------------------------------------------------------------------
 void getFileData(std::vector<NetworkDevice*>& vpDevices);
-static void setDeviceData(NetworkDevice*pND, std::stringstream& ss);
+static void setDeviceData(std::stringstream& ss, NetworkDevice*pND);
+void processDevices(std::vector<NetworkDevice*>& vpDevices);
+void reportDevices(std::vector<NetworkDevice*>& vpDevices);
 
 //------------------------------------------------------------------------------
 // NetworkDevice static member
@@ -55,38 +60,13 @@ unsigned NetworkDevice::assetCount = 0;
 //------------------------------------------------------------------------------
 int main()
 {
+    // wrap vector of pointers to ensure memory is deallocated
     VectorWrapper vDevices(ESTIMATED_DEVICE_COUNT);
 
-    try
-    {
-        getFileData(vDevices.vpDevices);
-    }
-    catch (const FileReadError& e)
-    {
-        std::cout << e.what() << INPUT_FILENAME << "\n";
-        exit(ERROR_FILE_OPEN);
-    }
-    catch (const std::exception& e)
-    {
-        std::cout << e.what() << "\n";
-        exit(ERROR_FILE_OTHER);
-    }
+    processDevices(vDevices.vpDevices);
+    reportDevices(vDevices.vpDevices);
 
-    std::cout << "Number of network device assets: "
-        << NetworkDevice::assetCount << "\n\n";
-
-    // count total device ports
-    unsigned totalPorts = 0;
-
-    for (NetworkDevice* pDevice : vDevices.vpDevices)
-    {
-        totalPorts += pDevice->ports;
-
-        pDevice->print();
-        std::cout << "\n";
-    }
-
-    std::cout << "Total Ethernet ports: " << totalPorts << "\n\n";
+    return ERROR_ALL_OK;
 }
 
 //------------------------------------------------------------------------------
@@ -114,7 +94,10 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
         else
             pND = new Switch();
 
-        setDeviceData(pND, ss);
+        // store common data in base class members
+        setDeviceData(ss, pND);
+
+        // store device specific data in derived class members
         std::getline(ss, token, ',');
         pND->setDeviceSpecific(token);
 
@@ -127,7 +110,7 @@ void getFileData(std::vector<NetworkDevice*>& vpDevices)
 //------------------------------------------------------------------------------
 // build Router or Switch instance from stringstream data
 //------------------------------------------------------------------------------
-static inline void setDeviceData(NetworkDevice*pND, std::stringstream& ss)
+static inline void setDeviceData(std::stringstream& ss, NetworkDevice*pND)
 {
     std::string token;
 
@@ -139,5 +122,51 @@ static inline void setDeviceData(NetworkDevice*pND, std::stringstream& ss)
     pND->location = token;
     std::getline(ss, token, ',');
     pND->connectedTo = token;
+}
+
+//------------------------------------------------------------------------------
+// try/catch for file reading and processing
+//------------------------------------------------------------------------------
+void processDevices(std::vector<NetworkDevice*>& vpDevices)
+{
+    try
+    {
+        getFileData(vpDevices);
+    }
+    catch (const FileReadError& e)
+    {
+        std::cout << e.what() << INPUT_FILENAME << "\n";
+        exit(ERROR_FILE_OPEN);
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << "\n";
+        exit(ERROR_FILE_OTHER);
+    }
+    catch (...)
+    {
+        std::cout << MSG_ERROR_UNKNOWN << "\n";
+        exit(ERROR_UNKNOWN);
+    }
+}
+
+//------------------------------------------------------------------------------
+// display device information and total device ports
+//------------------------------------------------------------------------------
+void reportDevices(std::vector<NetworkDevice*>& vpDevices)
+{
+    std::cout << "Number of network device assets: "
+        << NetworkDevice::assetCount << "\n\n";
+
+    unsigned totalPorts = 0;
+    for (NetworkDevice* pDevice : vpDevices)
+    {
+        pDevice->print();
+        std::cout << "\n";
+
+        totalPorts += pDevice->ports;
+    }
+
+    std::cout << "Total Ethernet ports: " << totalPorts << "\n\n";
 }
 
